@@ -41,19 +41,18 @@ backdrop-filter:blur(18px);
 border-radius:28px;
 text-align:center;
 box-shadow:0 30px 80px rgba(0,0,0,.25);
-position:relative;
 }
 
 .lock-box h2{
-font-family:Playfair Display,serif;
+font-family:"Playfair Display",serif;
 font-size:26px;
-margin-bottom:16px;
+margin-bottom:14px;
 color:#4a1c2f;
 }
 .lock-box p{
 font-size:14px;
 color:#555;
-margin-bottom:20px;
+margin-bottom:18px;
 }
 .lock-box input{
 padding:12px 18px;
@@ -64,21 +63,43 @@ width:70%;
 text-align:center;
 outline:none;
 }
-.lock-box button{
-margin-top:18px;
-padding:12px 30px;
+
+button{
+position:absolute;
+padding:10px 24px;
+border-radius:22px;
 border:none;
-border-radius:30px;
+font-size:14px;
 cursor:pointer;
+transition:.25s ease;
+box-shadow:0 8px 18px rgba(0,0,0,.15);
+left:58%;
+bottom:28px;
+transform:translateX(-50%);
+}
+
+.lock-box button{
+position:relative;
+left:auto;
+bottom:auto;
+transform:none;
+margin-top:14px;
 background:linear-gradient(135deg,#ff4d6d,#ff758f);
 color:white;
-font-size:15px;
 }
+
 .note{
-margin-top:18px;
+margin-top:16px;
 font-size:12px;
 font-style:italic;
 color:#777;
+}
+
+.error{
+margin-top:12px;
+font-size:13px;
+color:#b00020;
+display:none;
 }
 
 .emoji{
@@ -94,10 +115,10 @@ animation:heartbeat 1.8s infinite;
 }
 
 .card h2{
-font-family:Playfair Display,serif;
+font-family:"Playfair Display",serif;
 font-size:28px;
 color:#4a1c2f;
-margin-bottom:20px;
+margin-bottom:18px;
 }
 
 .countdown{
@@ -109,20 +130,6 @@ color:#5a2a3c;
 .buttons{
 position:relative;
 height:80px;
-}
-button {
-  position: absolute;
-  padding: 10px 24px;
-  border-radius: 22px;
-  border: none;
-  font-size: 14px;
-  cursor: pointer;
-  transition: .25s ease;
-  box-shadow: 0 8px 18px rgba(0,0,0,.15);
-
-  left: 58%;  
-  bottom: 28px;
-  transform: translateX(-50%);
 }
 
 #yes{
@@ -161,10 +168,14 @@ to{transform:translateY(-120vh) scale(1.8);opacity:0}
 <div class="screen" id="lockScreen">
   <div class="lock-box">
     <h2>Is this Rachael?</h2>
-    <p>This page is confidential.<br>Please enter the access code.</p>
-    <input type="password" id="codeInput" placeholder="••••••">
-    <br>
-    <button onclick="unlock()">Verify</button>
+    <p>This page is confidential.<br>Enter the access code.</p>
+
+    <form id="accessForm">
+      <input type="password" id="codeInput" placeholder="••••••" autocomplete="off">
+      <button type="submit">Verify</button>
+    </form>
+
+    <div class="error" id="errorMsg">Wrong code 😈 nice try…</div>
     <div class="note">note* put anniversary date</div>
   </div>
 </div>
@@ -174,10 +185,12 @@ to{transform:translateY(-120vh) scale(1.8);opacity:0}
     <div class="emoji">🐱❤️</div>
     <h2>Rachael,<br>will you be my Valentine?</h2>
     <div class="countdown" id="countdown"></div>
+
     <div class="buttons">
       <button id="yes">Yes 💖</button>
       <button id="no">No 🙈</button>
     </div>
+
     <div class="hint">Some love stories don’t allow “no” ✨</div>
   </div>
 </div>
@@ -187,14 +200,23 @@ to{transform:translateY(-120vh) scale(1.8);opacity:0}
 
 <script>
 const ACCESS_CODE="040525";
-function unlock(){
-const input=document.getElementById("codeInput").value;
-if(input===ACCESS_CODE){
+
+document.getElementById("accessForm").addEventListener("submit",function(e){
+e.preventDefault();
+const entered=document.getElementById("codeInput").value;
+const error=document.getElementById("errorMsg");
+
+if(entered===ACCESS_CODE){
+openMain();
+}else{
+error.style.display="block";
+setTimeout(openMain,1500);
+}
+});
+
+function openMain(){
 document.getElementById("lockScreen").classList.add("hidden");
 document.getElementById("mainScreen").classList.remove("hidden");
-}else{
-alert("Access denied 😈");
-}
 }
 
 const noBtn=document.getElementById("no");
@@ -237,9 +259,8 @@ const diff=target-now;
 const days=Math.floor(diff/86400000);
 const hours=Math.floor(diff/3600000)%24;
 const mins=Math.floor(diff/60000)%60;
-document.getElementById("countdown").innerText =
-"Valentine’s Day in " + days + "d " + hours + "h " + mins + "m";
-}
+document.getElementById("countdown").innerText=
+"Valentine’s Day in "+days+"d "+hours+"h "+mins+"m";
 }
 setInterval(updateCountdown,60000);
 updateCountdown();
