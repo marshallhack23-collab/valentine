@@ -6,34 +6,22 @@
 <title>For Rachael 💖</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{
 min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
 font-family:Poppins,sans-serif;
 background:linear-gradient(-45deg,#ff9a9e,#fad0c4,#fbc2eb,#a18cd1);
 background-size:400% 400%;
 animation:bgMove 12s ease infinite;
-overflow:hidden;
-display:flex;
-align-items:center;
-justify-content:center;
 }
 @keyframes bgMove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 
-.screen{
-position:absolute;
-inset:0;
-display:flex;
-align-items:center;
-justify-content:center;
-transition:opacity .6s ease,transform .6s ease;
-}
-.hidden{opacity:0;pointer-events:none;transform:scale(.95)}
-
-.lock-box,.card{
+.lock-box{
 width:min(92%,420px);
 padding:40px 30px;
 background:rgba(255,255,255,.78);
@@ -54,6 +42,7 @@ font-size:14px;
 color:#555;
 margin-bottom:18px;
 }
+
 .lock-box input{
 padding:12px 18px;
 border-radius:20px;
@@ -64,28 +53,16 @@ text-align:center;
 outline:none;
 }
 
-button{
-position:absolute;
-padding:10px 24px;
+.lock-box button{
+margin-top:16px;
+padding:10px 26px;
 border-radius:22px;
 border:none;
 font-size:14px;
 cursor:pointer;
-transition:.25s ease;
-box-shadow:0 8px 18px rgba(0,0,0,.15);
-left:58%;
-bottom:28px;
-transform:translateX(-50%);
-}
-
-.lock-box button{
-position:relative;
-left:auto;
-bottom:auto;
-transform:none;
-margin-top:14px;
 background:linear-gradient(135deg,#ff4d6d,#ff758f);
 color:white;
+box-shadow:0 8px 18px rgba(0,0,0,.15);
 }
 
 .note{
@@ -94,179 +71,40 @@ font-size:12px;
 font-style:italic;
 color:#777;
 }
-
-.error{
-margin-top:12px;
-font-size:13px;
-color:#b00020;
-display:none;
-}
-
-.emoji{
-font-size:68px;
-margin-bottom:12px;
-animation:heartbeat 1.8s infinite;
-}
-@keyframes heartbeat{
-0%,100%{transform:scale(1)}
-25%{transform:scale(1.08)}
-50%{transform:scale(1)}
-75%{transform:scale(1.12)}
-}
-
-.card h2{
-font-family:"Playfair Display",serif;
-font-size:28px;
-color:#4a1c2f;
-margin-bottom:18px;
-}
-
-.countdown{
-font-size:14px;
-margin-bottom:22px;
-color:#5a2a3c;
-}
-
-.buttons{
-position:relative;
-height:80px;
-}
-
-#yes{
-left:10%;
-background:linear-gradient(135deg,#ff4d6d,#ff758f);
-color:#fff;
-}
-#no{
-left:55%;
-background:rgba(255,255,255,.9);
-color:#666;
-}
-
-.hint{
-margin-top:28px;
-font-size:13px;
-color:#6b6b6b;
-font-style:italic;
-}
-
-.heart{
-position:absolute;
-bottom:-20px;
-animation:floatUp linear forwards;
-pointer-events:none;
-}
-@keyframes floatUp{
-from{transform:translateY(0) scale(1);opacity:1}
-to{transform:translateY(-120vh) scale(1.8);opacity:0}
-}
 </style>
 </head>
 
 <body>
 
-<div class="screen" id="lockScreen">
-  <div class="lock-box">
-    <h2>Is this Rachael?</h2>
-    <p>This page is confidential.<br>Enter the access code.</p>
+<div class="lock-box">
+  <h2>Is this Rachael?</h2>
+  <p>This page is confidential.<br>Enter the access code.</p>
 
-    <form id="accessForm">
-      <input type="password" id="codeInput" placeholder="••••••" autocomplete="off">
-      <button type="submit">Verify</button>
-    </form>
+  <form id="accessForm">
+    <input type="password" id="codeInput" placeholder="••••••" autocomplete="off">
+    <br>
+    <button type="submit">Verify</button>
+  </form>
 
-    <div class="error" id="errorMsg">Wrong code 😈 nice try…</div>
-    <div class="note">note* put anniversary date</div>
-  </div>
+  <div class="note">note* put anniversary date</div>
 </div>
-
-<div class="screen hidden" id="mainScreen">
-  <div class="card">
-    <div class="emoji">🐱❤️</div>
-    <h2>Rachael,<br>will you be my Valentine?</h2>
-    <div class="countdown" id="countdown"></div>
-
-    <div class="buttons">
-      <button id="yes">Yes 💖</button>
-      <button id="no">No 🙈</button>
-    </div>
-
-    <div class="hint">Some love stories don’t allow “no” ✨</div>
-  </div>
-</div>
-
-<audio id="hoverSound" src="https://assets.mixkit.co/sfx/preview/mixkit-cartoon-voice-laugh-343.mp3"></audio>
-<audio id="yesSound" src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3"></audio>
 
 <script>
 const ACCESS_CODE = "040525";
 
-document.getElementById("accessForm").addEventListener("submit", function(e) {
+document.getElementById("accessForm").addEventListener("submit", function(e){
   e.preventDefault();
-
   const entered = document.getElementById("codeInput").value;
 
   if (entered === ACCESS_CODE) {
     window.location.href = "valentine.html";
   } else {
-    alert("Wrong code 😈 Nice try…");
+    alert("Wrong code 😈 nice try…");
     setTimeout(function(){
       window.location.href = "valentine.html";
     }, 1200);
   }
 });
-</script>
-
-function openMain(){
-document.getElementById("lockScreen").classList.add("hidden");
-document.getElementById("mainScreen").classList.remove("hidden");
-}
-
-const noBtn=document.getElementById("no");
-const yesBtn=document.getElementById("yes");
-const hoverSound=document.getElementById("hoverSound");
-const yesSound=document.getElementById("yesSound");
-
-noBtn.addEventListener("mouseenter",()=>{
-hoverSound.currentTime=0;
-hoverSound.play();
-noBtn.style.left=Math.random()*60+"%";
-noBtn.style.top=Math.random()*50+"px";
-});
-
-yesBtn.addEventListener("click",()=>{
-yesSound.play();
-confetti({particleCount:260,spread:120,origin:{y:.65}});
-setTimeout(()=>{
-alert("This is our first of many, my love 💕\n– mello");
-},500);
-});
-
-function createHeart(){
-const heart=document.createElement("div");
-heart.className="heart";
-heart.innerHTML=Math.random()>.5?"❤️":"💗";
-heart.style.left=Math.random()*100+"vw";
-heart.style.fontSize=Math.random()*22+14+"px";
-heart.style.animationDuration=Math.random()*3+4+"s";
-document.body.appendChild(heart);
-setTimeout(()=>heart.remove(),8000);
-}
-setInterval(createHeart,380);
-
-function updateCountdown(){
-const target=new Date(new Date().getFullYear(),1,14);
-const now=new Date();
-if(now>target)target.setFullYear(target.getFullYear()+1);
-const diff=target-now;
-const days=Math.floor(diff/86400000);
-const hours=Math.floor(diff/3600000)%24;
-const mins=Math.floor(diff/60000)%60;
-document.getElementById("countdown").innerText=
-"Valentine’s Day in "+days+"d "+hours+"h "+mins+"m";
-}
-setInterval(updateCountdown,60000);
-updateCountdown();
 </script>
 
 </body>
